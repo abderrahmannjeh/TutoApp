@@ -1,7 +1,10 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TutoApp.DBAccess;
 using TutoApp.DBAccess.IRepository;
 using TutoApp.DBAccess.Repository;
@@ -21,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TutoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("tuto")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = false;
 })
@@ -40,6 +43,7 @@ builder.Services.AddScoped<ILigneCommandeRepository<LigneCommande>, LigneCommand
 builder.Services.AddScoped<ILigneCommandeService<LigneCommandeDTO, LigneCommande>, LigneCommandeService<LigneCommandeDTO, LigneCommande>>();
 builder.Services.AddScoped<IProductRepository<Product>, ProductRepository<Product>>();
 builder.Services.AddScoped<IProductService<ProductDTO, Product>, ProductService<ProductDTO, Product>>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 var configuration = new MapperConfiguration(cfg => {
     cfg.AddProfile<ClientProfile>();
     cfg.AddProfile<CategoryProfile>();
@@ -47,6 +51,20 @@ var configuration = new MapperConfiguration(cfg => {
     cfg.AddProfile<LigneCommandeProfile>();
     cfg.AddProfile<ProductProfile>();
 });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+     .AddJwtBearer(options =>
+     {
+         options.TokenValidationParameters = new TokenValidationParameters
+         {
+             ValidateIssuer = true,
+             ValidateAudience = true,
+             ValidateLifetime = true,
+             ValidateIssuerSigningKey = true,
+             ValidIssuer = builder.Configuration["Jwt:Issuer"],
+             ValidAudience = builder.Configuration["Jwt:Audience"],
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+         };
+     });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();

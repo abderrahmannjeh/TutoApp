@@ -6,7 +6,7 @@ using TutoApp.Entity;
 
 namespace TutoApp.DBAccess
 {
-    public class TutoContext:IdentityDbContext<IdentityUser>
+    public class TutoContext:IdentityDbContext<User>
     {
 
         public TutoContext(DbContextOptions<TutoContext> options) :base(options) { }
