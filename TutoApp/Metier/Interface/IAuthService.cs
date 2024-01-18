@@ -4,7 +4,7 @@ namespace TutoApp.Metier.Interface
 {
     public interface IAuthService
     {
-        Task<string> RegisterUser(UserDTO model);
-        Task<string> LoginUser(UserDTO model);
+        Task<LoginResponse> RegisterUser(UserDTO model);
+        Task<LoginResponse> LoginUser(UserDTO model);
     }
 }

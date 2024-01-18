@@ -43,6 +43,13 @@ builder.Services.AddScoped<ILigneCommandeRepository<LigneCommande>, LigneCommand
 builder.Services.AddScoped<ILigneCommandeService<LigneCommandeDTO, LigneCommande>, LigneCommandeService<LigneCommandeDTO, LigneCommande>>();
 builder.Services.AddScoped<IProductRepository<Product>, ProductRepository<Product>>();
 builder.Services.AddScoped<IProductService<ProductDTO, Product>, ProductService<ProductDTO, Product>>();
+
+builder.Services.AddScoped<ITagRepository<Tag>, TagRepository<Tag>>();
+builder.Services.AddScoped<ITagServicecse<TagDTO, Tag>, TagService<TagDTO, Tag>>();
+
+builder.Services.AddScoped<IBrandRepository<Brand>, BrandRepository<Brand>>();
+builder.Services.AddScoped<IBrandServicee<BrandDTO, Brand>, BrandService<BrandDTO, Brand>>();
+
 builder.Services.AddScoped<IAuthService,AuthService>();
 var configuration = new MapperConfiguration(cfg => {
     cfg.AddProfile<ClientProfile>();
@@ -50,7 +57,17 @@ var configuration = new MapperConfiguration(cfg => {
     cfg.AddProfile<CommandeProfile>();
     cfg.AddProfile<LigneCommandeProfile>();
     cfg.AddProfile<ProductProfile>();
+    cfg.AddProfile<BrandProfile>();
+    cfg.AddProfile<TagProfile>();
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
      .AddJwtBearer(options =>
      {
@@ -75,7 +92,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("AllowOrigin");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -9,10 +9,12 @@ namespace TutoApp.Dto
 
         public string Password { get; set; }
 
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
-        public bool IsStore { get; set; }
+        public bool? IsStore { get; set; }
+
+        public string? Avatar { get; set; }
     }
 }

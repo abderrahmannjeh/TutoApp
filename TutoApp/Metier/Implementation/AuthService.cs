@@ -23,7 +23,7 @@ namespace TutoApp.Metier.Implementation
             _configuration = configuration;
         }
 
-        public async Task<string> RegisterUser(UserDTO model)
+        public async Task<LoginResponse> RegisterUser(UserDTO model)
         {
             var user = new User
             {
@@ -31,30 +31,58 @@ namespace TutoApp.Metier.Implementation
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Type = model.IsStore?"Store":"Client",
+                Type = (bool)model.IsStore?"Store":"Client",
                 ConnectionString="test"
             };
+
+            var userCheck = await _userManager.FindByEmailAsync(user.Email);
+            if(userCheck != null)
+            {
+                throw new Exception("User Exist With this email");
+            }
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                return GenerateJwtToken(user);
+              return  new LoginResponse() { Token=GenerateJwtToken(user),
+                                      Email=model.Email,
+                                      FirstName=model.FirstName,
+                                      LastName=model.LastName,
+                                      HasError=false,
+                                      IsStore=model.IsStore,
+                                    };
+            }
+            else
+            {
+                var error = string.Empty;
+                foreach(var e in result.Errors)
+                {
+                    error =  error + "*"+e.Description;
+                }
+                throw new Exception(error);
             }
 
-            return null;
         }
 
-        public async Task<string> LoginUser(UserDTO model)
+        public async Task<LoginResponse> LoginUser(UserDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                return GenerateJwtToken(user);
+                return new LoginResponse()
+                {
+                    Token = GenerateJwtToken(user),
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    HasError = false,
+                    IsStore = user.Type =="Store"?true:false,
+                }; ;
             }
 
-            return null;
+            throw new Exception("Password Or Email not correct");
         }
 
         private string GenerateJwtToken(User user)
