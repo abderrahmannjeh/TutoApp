@@ -10,8 +10,21 @@ namespace TutoApp.Metier.Implementation
          where TentityDto : ProductDTO
         where TEntity : Product, new()
     {
+        private IProductRepository<Product> _productRepository;
         public ProductService(IGenericRepository<TEntity> genericRepository, IMapper mapper) : base(genericRepository, mapper)
         {
+        }
+
+        public async Task<ProductDTO> FindProductWithDetailsById(int id)
+        {
+            Product result = await _productRepository.FindProductWithDetailsById(id);
+            if (result != null)
+            {
+                return _mapper.Map<ProductDTO>(result);
+
+            }
+            else
+                throw new Exception("Product Not Found");
         }
     }
 }

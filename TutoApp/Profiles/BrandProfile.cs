@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TutoApp.Dto;
 using TutoApp.Entity;
 
 namespace TutoApp.Profiles
@@ -7,7 +8,7 @@ namespace TutoApp.Profiles
     {
         public BrandProfile() { 
         
-            CreateMap<Brand,Brand>().ReverseMap();
+            CreateMap<Brand,BrandDTO>().ReverseMap();
         }
     }
 }

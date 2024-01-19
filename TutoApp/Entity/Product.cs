@@ -19,6 +19,8 @@
         public int Stock { get; set; }
         public int Reserved { get; set; }
         public bool? IsActive { get; set; }
+
+        public string? UserID { get; set; }
         public Category? Category { get; set; }
         public Brand? Brand { get; set; }
         public List<Tag> Tags { get; set; } = new List<Tag>();

@@ -12,7 +12,7 @@ namespace TutoApp.Dto
         public int? CategoryID { get; set; }
 
         public int? BrandID { get; set; }
-        public int? UserID { get; set; }
+        public string? UserID { get; set; }
         public float? Weight { get; set; }
         public float? Cost { get; set; }
 
