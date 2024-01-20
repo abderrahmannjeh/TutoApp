@@ -18,34 +18,44 @@ namespace TutoApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserDTO model)
+        public async Task<LoginResponse> Register([FromBody] UserDTO model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var token = await _authService.RegisterUser(model);
+                var registerResult = await _authService.RegisterUser(model);
 
-                if (token != null)
+                if (registerResult != null)
                 {
-                    return Ok(new { Token = token });
+                    return registerResult;
                 }
 
-                return BadRequest("Registration failed");
+                return new LoginResponse() { HasError = true, Error = "Registration failed" };
             }
-
-            return BadRequest(ModelState);
+            catch (Exception ex)
+            {
+                return new LoginResponse() { HasError = true, Error = ex.Message };
+            }
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserDTO model)
+        public async Task<LoginResponse> Login([FromBody] UserDTO model)
         {
-            var token = await _authService.LoginUser(model);
-
-            if (token != null)
+            try
             {
-                return Ok(new { Token = token });
+                var result = await _authService.LoginUser(model);
+
+                if (result != null)
+                {
+                    return result;
+                }
+                return new LoginResponse() { HasError = true, Error = "Login failed" };
+            }
+            catch(Exception ex) {
+
+                return new LoginResponse() { HasError = true, Error = ex.Message };
             }
 
-            return Unauthorized("Invalid credentials");
+      
         }
     }
 }

@@ -17,6 +17,9 @@ namespace TutoApp.DBAccess
         public DbSet<LigneCommande> LignesCommandes { get;set; }
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+
 
 
     }

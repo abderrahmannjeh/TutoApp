@@ -7,5 +7,6 @@ namespace TutoApp.Metier.Interface
         where TentityDto : ProductDTO
         where TEntity : Product, new()
     {
+        Task<ProductDTO> FindProductWithDetailsById(int id);
     }
 }

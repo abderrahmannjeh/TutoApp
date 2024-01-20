@@ -5,7 +5,7 @@ namespace TutoApp.DBAccess.Repository
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        private readonly TutoContext dbContext;
+        protected readonly TutoContext dbContext;
         public GenericRepository(TutoContext dbContext) {
         this.dbContext = dbContext;
         }
