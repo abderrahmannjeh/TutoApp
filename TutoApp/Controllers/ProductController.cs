@@ -11,11 +11,11 @@ namespace TutoApp.Controllers
     public class ProductController : GenericController<ProductDTO, Product>
     {
         private IProductService<ProductDTO, Product> _productService;
-        public ProductController(IGenericService<ProductDTO, Product> genericService) : base(genericService)
+        public ProductController(IGenericService<ProductDTO, Product> genericService, IProductService<ProductDTO, Product> productService) : base(genericService)
         {
-
+            _productService = productService;
         }
-        [HttpGet("GetProductWithDetails")]
+        [HttpGet("GetProductWithDetails/{id}")]
         public async Task<ProductDTO> GetProductWithAllDEtails(int id)
         {
             try

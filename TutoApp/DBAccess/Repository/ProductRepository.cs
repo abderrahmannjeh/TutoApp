@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using TutoApp.DBAccess.IRepository;
 using TutoApp.Entity;
 

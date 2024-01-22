@@ -11,8 +11,9 @@ namespace TutoApp.Metier.Implementation
         where TEntity : Product, new()
     {
         private IProductRepository<Product> _productRepository;
-        public ProductService(IGenericRepository<TEntity> genericRepository, IMapper mapper) : base(genericRepository, mapper)
+        public ProductService(IGenericRepository<TEntity> genericRepository, IMapper mapper, IProductRepository<Product> productRepository) : base(genericRepository, mapper)
         {
+            _productRepository = productRepository;
         }
 
         public async Task<ProductDTO> FindProductWithDetailsById(int id)
