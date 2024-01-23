@@ -93,6 +93,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseStaticFiles();
+app.UseFileServer(enableDirectoryBrowsing: true);
 app.UseCors("AllowOrigin");
 app.UseHttpsRedirection();
 

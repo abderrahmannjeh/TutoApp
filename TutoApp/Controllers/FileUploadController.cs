@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using static System.Net.WebRequestMethods;
 
 namespace TutoApp.Controllers
 {
@@ -32,7 +33,7 @@ namespace TutoApp.Controllers
             {
                 if (string.IsNullOrWhiteSpace(_hostingEnvironment.WebRootPath))
                 {
-                    _hostingEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                    _hostingEnvironment.WebRootPath = "http://localhost:8080/uploads";
                 }
                 string webRootPath = _hostingEnvironment.WebRootPath;
                 string uploadsDir = Path.Combine(webRootPath, "uploads");
@@ -50,7 +51,7 @@ namespace TutoApp.Controllers
                 await file.CopyToAsync(stream);
                 await stream.FlushAsync();
 
-                string location = uploadsDir+"/"+fileName;
+                string location = "http://localhost:8080/uploads/" + fileName;
 
                 var result = new
                 {
